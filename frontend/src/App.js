@@ -170,6 +170,7 @@ export default function App() {
           predictions={predictionData}
           precautions={precautions}
           onClose={() => setShowDashboard(false)}
+          user={user}
         />
       )}
 

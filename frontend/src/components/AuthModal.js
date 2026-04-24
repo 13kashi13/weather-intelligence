@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
 import "./AuthModal.css";
 
 const API = "http://localhost:8000";
@@ -22,14 +23,27 @@ export default function AuthModal({ onClose, onAuth }) {
         ? { email: form.email, password: form.password }
         : { name: form.name, email: form.email, password: form.password };
       const res = await axios.post(`${API}${endpoint}`, payload);
-      localStorage.setItem("forecast_token", res.data.token);
-      localStorage.setItem("forecast_user", JSON.stringify({ name: res.data.name, email: res.data.email }));
-      onAuth({ name: res.data.name, email: res.data.email });
-      onClose();
+      persist(res.data);
     } catch (e) {
       setError(e.response?.data?.detail || "Something went wrong");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const persist = (data) => {
+    localStorage.setItem("forecast_token", data.token);
+    localStorage.setItem("forecast_user", JSON.stringify({ name: data.name, email: data.email, picture: data.picture || "" }));
+    onAuth({ name: data.name, email: data.email, picture: data.picture || "" });
+    onClose();
+  };
+
+  const onGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axios.post(`${API}/auth/google`, { credential: credentialResponse.credential });
+      persist(res.data);
+    } catch (e) {
+      setError("Google sign-in failed. Try email login.");
     }
   };
 
@@ -41,8 +55,9 @@ export default function AuthModal({ onClose, onAuth }) {
           <p>Your personal weather intelligence platform. Know what's coming before it arrives.</p>
           <div className="auth-features">
             <div>☁ Live weather for any location</div>
-            <div>📊 Charts & ML forecasts</div>
+            <div>📊 Charts &amp; ML forecasts</div>
             <div>🤖 AI-powered precautions</div>
+            <div>📄 Downloadable PDF reports</div>
           </div>
         </div>
 
@@ -50,6 +65,20 @@ export default function AuthModal({ onClose, onAuth }) {
           <button className="auth-close" onClick={onClose}>✕</button>
           <h2>{mode === "login" ? "Welcome back" : "Create account"}</h2>
           <p className="auth-sub">{mode === "login" ? "Sign in to your account" : "Start for free, no credit card needed"}</p>
+
+          {/* Google Sign-In */}
+          <div className="google-btn-wrap">
+            <GoogleLogin
+              onSuccess={onGoogleSuccess}
+              onError={() => setError("Google sign-in failed")}
+              theme="filled_black"
+              shape="rectangular"
+              width="100%"
+              text={mode === "login" ? "signin_with" : "signup_with"}
+            />
+          </div>
+
+          <div className="auth-divider"><span>or continue with email</span></div>
 
           <form onSubmit={submit}>
             {mode === "register" && (

@@ -161,4 +161,18 @@ form { display: flex; flex-direction: column; gap: 16px; }
   cursor: pointer;
   font-weight: 500;
 }
-.auth-switch span:hover { text-decoration: underline; }
+.auth-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 16px 0;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1;
+  height: 1px; background: rgba(255,255,255,0.08);
+}
+.auth-divider span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+  white-space: nowrap;
+}
+.google-btn-wrap { width: 100%; }

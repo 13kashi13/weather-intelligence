@@ -1,0 +1,25 @@
+[
+  {
+    "email": "vgawai888@gmail.com",
+    "name": "VAIBHAV GAWAI",
+    "location": "Akola",
+    "country": "IN",
+    "timestamp": "2026-04-24T13:54:50.927052",
+    "weather": {
+      "temp": 41.21,
+      "feels_like": 38.42,
+      "humidity": 11,
+      "pressure": 1005,
+      "wind_speed": 2.02,
+      "wind_deg": 345,
+      "description": "clear sky",
+      "icon": "01d",
+      "location": "Akola",
+      "country": "IN",
+      "clouds": 10,
+      "visibility": 10,
+      "sunrise": 1776990402,
+      "sunset": 1777036398
+    }
+  }
+]
