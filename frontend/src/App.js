@@ -100,7 +100,7 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   const onMapClick = useCallback((e) => {
     const lat = e.latLng.lat();
