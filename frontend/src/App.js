@@ -3,8 +3,6 @@ import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import axios from "axios";
 import WeatherDashboard from "./components/WeatherDashboard";
 import SearchBar from "./components/SearchBar";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "./firebase";
 import LandingPage from "./components/LandingPage";
 import ChatBot from "./components/ChatBot";
 import AuthModal from "./components/AuthModal";
@@ -75,26 +73,6 @@ export default function App() {
       });
       setPrecautions(prec.data);
       setShowDashboard(true);
-
-      // Save search to Firestore if user is logged in
-      if (user) {
-        try {
-          await addDoc(collection(db, "searches"), {
-            uid: user.uid || "",
-            email: user.email,
-            name: user.name,
-            location: curr.data.location,
-            country: curr.data.country,
-            temp: curr.data.temp,
-            description: curr.data.description,
-            lat: lat,
-            lon: lon,
-            timestamp: serverTimestamp(),
-          });
-        } catch (e) {
-          console.log("Firestore save failed:", e.message);
-        }
-      }
     } catch (e) {
       console.error(e);
     } finally {

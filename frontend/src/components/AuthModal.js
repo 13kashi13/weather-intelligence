@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db, googleProvider } from "../firebase";
+import axios from "axios";
 import "./AuthModal.css";
+
+const API = "http://localhost:8000";
 
 export default function AuthModal({ onClose, onAuth }) {
   const [mode, setMode] = useState("login");
@@ -17,23 +12,8 @@ export default function AuthModal({ onClose, onAuth }) {
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const saveUserToFirestore = async (user, name) => {
-    await setDoc(doc(db, "users", user.uid), {
-      name: name || user.displayName || user.email.split("@")[0],
-      email: user.email,
-      photo: user.photoURL || "",
-      lastLogin: serverTimestamp(),
-      createdAt: serverTimestamp(),
-    }, { merge: true });
-  };
-
-  const persist = (user, name) => {
-    const userData = {
-      name: name || user.displayName || user.email.split("@")[0],
-      email: user.email,
-      picture: user.photoURL || "",
-      uid: user.uid,
-    };
+  const persist = (data) => {
+    const userData = { name: data.name, email: data.email, picture: data.picture || "" };
     localStorage.setItem("forecast_user", JSON.stringify(userData));
     onAuth(userData);
     onClose();
@@ -44,39 +24,14 @@ export default function AuthModal({ onClose, onAuth }) {
     setError("");
     setLoading(true);
     try {
-      if (mode === "register") {
-        const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
-        await updateProfile(cred.user, { displayName: form.name });
-        await saveUserToFirestore(cred.user, form.name);
-        persist(cred.user, form.name);
-      } else {
-        const cred = await signInWithEmailAndPassword(auth, form.email, form.password);
-        await saveUserToFirestore(cred.user);
-        persist(cred.user);
-      }
+      const endpoint = mode === "login" ? "/auth/login" : "/auth/register";
+      const payload = mode === "login"
+        ? { email: form.email, password: form.password }
+        : { name: form.name, email: form.email, password: form.password };
+      const res = await axios.post(`${API}${endpoint}`, payload);
+      persist(res.data);
     } catch (e) {
-      const msg = {
-        "auth/email-already-in-use": "Email already registered.",
-        "auth/wrong-password": "Incorrect password.",
-        "auth/user-not-found": "No account found with this email.",
-        "auth/weak-password": "Password must be at least 6 characters.",
-        "auth/invalid-credential": "Invalid email or password.",
-      };
-      setError(msg[e.code] || e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogle = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      await saveUserToFirestore(result.user);
-      persist(result.user);
-    } catch (e) {
-      setError("Google sign-in failed. Try again.");
+      setError(e.response?.data?.detail || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -100,15 +55,6 @@ export default function AuthModal({ onClose, onAuth }) {
           <button className="auth-close" onClick={onClose}>✕</button>
           <h2>{mode === "login" ? "Welcome back" : "Create account"}</h2>
           <p className="auth-sub">{mode === "login" ? "Sign in to your account" : "Start for free"}</p>
-
-          <div className="google-btn-wrap">
-            <button className="google-signin-btn" onClick={handleGoogle} disabled={loading}>
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width={18} />
-              Continue with Google
-            </button>
-          </div>
-
-          <div className="auth-divider"><span>or continue with email</span></div>
 
           <form onSubmit={submit}>
             {mode === "register" && (
