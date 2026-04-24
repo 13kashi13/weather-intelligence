@@ -52,36 +52,5 @@ def rule_based_precautions(data: WeatherData) -> dict:
 
 @router.post("/")
 def get_precautions(data: WeatherData):
-    prompt = f"""
-You are a weather advisory expert. Given the following weather data for {data.location}:
-- Temperature: {data.temp}°C
-- Humidity: {data.humidity}%
-- Wind Speed: {data.wind_speed} m/s
-- Pressure: {data.pressure} hPa
-- Conditions: {data.description}
-
-Provide specific, practical precautions for:
-1. Farmers (crop protection, irrigation, harvesting)
-2. Businessmen (logistics, outdoor operations, supply chain)
-3. General residents (health, travel, daily activities)
-4. People living near rivers (flood risk, water levels)
-5. People in hot/extreme weather zones (heat safety)
-
-Format your response as JSON with keys: farmers, business, residents, riverside, heat_alert.
-Each key should have an array of 2-3 concise bullet point strings.
-Return ONLY valid JSON, no markdown.
-"""
-    try:
-        response = _client.models.generate_content(
-            model="gemini-1.5-flash",
-            contents=prompt,
-        )
-        import json
-        text = response.text.strip()
-        if text.startswith("```"):
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-        return json.loads(text.strip())
-    except Exception:
-        return rule_based_precautions(data)
+    # Use rule-based to save Gemini quota for the chatbot
+    return rule_based_precautions(data)
