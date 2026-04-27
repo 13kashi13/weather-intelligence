@@ -9,7 +9,7 @@ import AuthModal from "./components/AuthModal";
 import "./App.css";
 
 import API from "./config";
-const GOOGLE_MAPS_KEY = "AIzaSyBt-oVyBLUuz2IYFXn6iSynnAp39k29mrs";
+const GOOGLE_MAPS_KEY = process.env.REACT_APP_GOOGLE_MAPS_KEY || "AIzaSyBt-oVyBLUuz2IYFXn6iSynnAp39k29mrs";
 const LIBRARIES = ["places"];
 
 const MAP_STYLES = [
