@@ -8,7 +8,7 @@ import PredictionGrid from "./PredictionGrid";
 import { FiX, FiCloud, FiBarChart2, FiShield, FiTrendingUp, FiDownload, FiGrid } from "react-icons/fi";
 import "./WeatherDashboard.css";
 
-const API = "http://localhost:8000";
+import API from "../config";
 
 const TABS = [
   { id: "current",    label: "Current",    icon: <FiCloud /> },

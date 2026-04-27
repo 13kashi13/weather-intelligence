@@ -8,7 +8,7 @@ import ChatBot from "./components/ChatBot";
 import AuthModal from "./components/AuthModal";
 import "./App.css";
 
-const API = "http://localhost:8000";
+import API from "./config";
 const GOOGLE_MAPS_KEY = "AIzaSyBt-oVyBLUuz2IYFXn6iSynnAp39k29mrs";
 const LIBRARIES = ["places"];
 

@@ -4,7 +4,7 @@ import { GiFarmer } from "react-icons/gi";
 import { FiBriefcase, FiUsers, FiDroplet, FiThermometer } from "react-icons/fi";
 import "./PrecautionCards.css";
 
-const API = "http://localhost:8000";
+import API from "../config";
 
 const CATEGORIES = [
   { key: "farmers",    label: { en: "Farmers",    mr: "शेतकरी"   }, icon: <GiFarmer />,      color: "#4ecdc4" },

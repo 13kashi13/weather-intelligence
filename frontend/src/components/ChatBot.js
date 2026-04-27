@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./ChatBot.css";
 
-const API = "http://localhost:8000";
+import API from "../config";
 
 const QUICK_PROMPTS = [
   "Should I go outside today?",

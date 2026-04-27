@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./AuthModal.css";
 
-const API = "http://localhost:8000";
+import API from "../config";
 
 export default function AuthModal({ onClose, onAuth }) {
   const [mode, setMode] = useState("login");
