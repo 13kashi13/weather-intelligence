@@ -7,8 +7,8 @@ services:
     startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
     envVars:
       - key: OPENWEATHER_API_KEY
-        value: abb66bbbcb62bfc8f3b872d65b0862a4
+        sync: false
       - key: GEMINI_API_KEY
-        value: AIzaSyCYKhRb4odOmmeBZcDAMYRE9TmxL0fJWlE
+        sync: false
       - key: GEMINI_CHAT_API_KEY
-        value: AIzaSyA2dqjjiG-pLtH6Po5NSXrtS_cjj0Sxgx
+        sync: false
