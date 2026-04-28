@@ -5,10 +5,11 @@ pandas
 numpy
 scikit-learn
 python-dotenv
-google-generativeai
-google-auth
 google-genai
+google-auth
 python-jose[cryptography]
 passlib[bcrypt]
 reportlab
-fastapi[all]
+playwright
+beautifulsoup4
+lxml
