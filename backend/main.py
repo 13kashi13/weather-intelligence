@@ -8,9 +8,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
+        "https://forensicsai.onrender.com",
         "https://*.vercel.app",
         "https://*.netlify.app",
-        "*"
     ],
     allow_methods=["*"],
     allow_headers=["*"],
