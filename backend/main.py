@@ -6,9 +6,15 @@ app = FastAPI(title="Weather Intelligence API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://*.vercel.app",
+        "https://*.netlify.app",
+        "*"
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 
 app.include_router(weather.router, prefix="/weather")
